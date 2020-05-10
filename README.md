@@ -15,5 +15,4 @@
 3. Right click to add starting cell and right click again to add ending cell.
 4. Click on the algorithms available on the right side.
 5. Press 'r' on keyboard to reset the grid/board anytime.
-6. To change the speed of animation, you'll have to change x in clock.tick(x) part of 
-the code. files named BFS, DFS, A* have this code line. 
+6. Press '+speed' and '-speed' to increase or decrease animation speed. 
