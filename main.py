@@ -15,16 +15,16 @@ def render_label(tile, screen):
 
 
 def initialization():
-    global  astar_button, newGrid, screen, status, another_mouse_input, dfs_button , grid_width
-    global  tile_matrix, makingWalls, end_tile, start_tile, bfs_button, algo_name
-    grid_width = 600 
+    global  astar_button, newGrid, screen, status, another_mouse_input, dfs_button , grid_width,menu_width 
+    global  tile_matrix, makingWalls, end_tile, start_tile, bfs_button, algo_name, de_clock_button, in_clock_button
+    grid_width = 1000 
     menu_width = 150
     screen_width = grid_width + menu_width #for menu
-    screen_height = 600
+    screen_height = 800
     # screen/window construction
     screen = pygame.display.set_mode((screen_width, screen_height))
-    rows = 12
-    columns = 12
+    rows = 20
+    columns = 20
     #colors
     white = (255, 255, 255)
     red = (255, 0, 0)
@@ -45,21 +45,26 @@ def initialization():
     makingWalls = False
     algo_name = None
     # menu/buttons
-    dfs_button = Button((int(menu_width*0.8), int(screen_height*0.15)), brown, 
-        (grid_width + int(0.1*menu_width), int(0.08*screen_height)), 'DFS')
+    in_clock_button = Button((int(menu_width*0.8), int(screen_height*0.1)), brown, 
+        (grid_width + int(0.1*menu_width), int(0.02*screen_height)), '+Speed')
 
-    bfs_button = Button((int(menu_width*0.8), int(screen_height*0.15)), brown, 
-        (grid_width + int(0.1*menu_width), int(0.31*screen_height)), 'BFS')
+    de_clock_button = Button((int(menu_width*0.8), int(screen_height*0.1)), brown, 
+        (grid_width + int(0.1*menu_width), int(0.13*screen_height)), '-Speed')
 
-    astar_button = Button((int(menu_width*0.8), int(screen_height*0.15)), brown, 
-        (grid_width + int(0.1*menu_width), int(0.54*screen_height)), 'A*')
+    dfs_button = Button((int(menu_width*0.8), int(screen_height*0.1)), brown, 
+        (grid_width + int(0.1*menu_width), int(0.24*screen_height)), 'DFS')
+
+    bfs_button = Button((int(menu_width*0.8), int(screen_height*0.1)), brown, 
+        (grid_width + int(0.1*menu_width), int(0.35*screen_height)), 'BFS')
+
+    astar_button = Button((int(menu_width*0.8), int(screen_height*0.1)), brown, 
+        (grid_width + int(0.1*menu_width), int(0.46*screen_height)), 'A*')
 
 def main():
-    global grid_width, newGrid, screen, makingWalls, end_tile, start_tile, dfs_button, astar_button
-    global tile_matrix, status, another_mouse_input, bfs_button, menu_width, algo_name
+    global grid_width, newGrid, screen, makingWalls, end_tile, start_tile, dfs_button, astar_button, menu_width 
+    global tile_matrix, status, another_mouse_input, bfs_button, menu_width, algo_name, de_clock_button, in_clock_button
     initialization()
-   
-
+    menu_list = [in_clock_button, de_clock_button, dfs_button, bfs_button, astar_button]
     running = True
     while running:
         screen.fill((255, 255, 255))
@@ -121,20 +126,23 @@ def main():
         if makingWalls:
             pos = pygame.mouse.get_pos()
             rowWall, columnWall = newGrid.clicked(pos) 
-            wall_tile = tile_matrix[rowWall][columnWall]
-            wall_tile.makeWall()
+            try:
+                wall_tile = tile_matrix[rowWall][columnWall]
+                wall_tile.makeWall()
+            except :
+                makingWalls = False
 
         if end_tile and status == "yet to search":
             render_label(end_tile, screen)
             # select which algo to use with buttons
             if algo_name == 'bfs':
-                bfs(tile_matrix, start_tile, end_tile, screen, newGrid)
+                bfs(tile_matrix, start_tile, end_tile, screen, newGrid, menu_list)
                 status = "done searching"
             elif algo_name == 'dfs':
-                dfs(tile_matrix, start_tile, end_tile, screen, newGrid)
+                dfs(tile_matrix, start_tile, end_tile, screen, newGrid, menu_list)
                 status = "done searching"
             elif algo_name == 'A*':
-                astar(tile_matrix, start_tile, end_tile, screen, newGrid)
+                astar(tile_matrix, start_tile, end_tile, screen, newGrid, menu_list)
                 status = "done searching"
             
 
@@ -145,9 +153,8 @@ def main():
             render_label(end_tile, screen)
         
         # display menu/buttons
-        dfs_button.draw_button(screen)
-        bfs_button.draw_button(screen)
-        astar_button.draw_button(screen)
+        for button_ in menu_list:
+                button_.draw_button(screen)
         # update screen
         pygame.display.update()
 

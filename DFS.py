@@ -21,10 +21,10 @@ class stack():
         self.node_list.clear()
 
 # Depth first search
-def dfs(Tile_matrix, start_tile, end_tile, screen, newGrid):
+def dfs(Tile_matrix, start_tile, end_tile, screen, newGrid, menu_list):
     stack_dfs = stack()
     stack_dfs.add(start_tile)
-
+    clock_speed = 2
     # solve the maze
     while not stack_dfs.empty():
         current_tile = stack_dfs.remove()
@@ -33,14 +33,23 @@ def dfs(Tile_matrix, start_tile, end_tile, screen, newGrid):
         # drawing/randering/updating
         draw_matrix(Tile_matrix, screen, newGrid)
 
-        clock.tick(2)   # speed of solving/animation
+        clock.tick(clock_speed)   # speed of solving/animation
         render_label(start_tile, screen)
         render_label(end_tile, screen)
+        # display menu/buttons
+        draw_menu(menu_list, screen)
         pygame.display.update()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+
+            if pygame.mouse.get_pressed() == (1, 0, 0):
+                pos = pygame.mouse.get_pos()
+                if menu_list[0].ishovering(pos):
+                    clock_speed+=2
+                elif menu_list[1].ishovering(pos):
+                    clock_speed-=2
 
     current_tile = end_tile
     path = []
@@ -87,3 +96,8 @@ def render_label(tile, screen):
     # label = font.render(tile.type, True, (255,255,255))
     cord = (tile.index[1]*tile.width + 10, tile.index[0]*tile.height + 10)
     screen.blit(icon, cord)
+
+def draw_menu(menu_list, screen):
+    for button_ in menu_list:
+        button_.draw_button(screen)
+

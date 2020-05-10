@@ -8,9 +8,10 @@ class Queue(stack):
         return self.node_list.pop(0)
 
 # Breadth first search
-def bfs(Tile_matrix, start_tile, end_tile, screen, newGrid):
+def bfs(Tile_matrix, start_tile, end_tile, screen, newGrid, menu_list):
     queue_bfs = Queue()
     queue_bfs.add(start_tile)
+    clock_speed = 2
 
     # solve the maze
     while not queue_bfs.empty():
@@ -20,14 +21,23 @@ def bfs(Tile_matrix, start_tile, end_tile, screen, newGrid):
         # drawing/randering/updating
         draw_matrix(Tile_matrix, screen, newGrid)
 
-        clock.tick(2)   # speed of solving/animation
+        clock.tick(clock_speed)   # speed of solving/animation
         render_label(start_tile, screen)
         render_label(end_tile, screen)
+        # display menu/buttons
+        draw_menu(menu_list, screen)
         pygame.display.update()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+
+            if pygame.mouse.get_pressed() == (1, 0, 0):
+                pos = pygame.mouse.get_pos()
+                if menu_list[0].ishovering(pos):
+                    clock_speed+=2
+                elif menu_list[1].ishovering(pos):
+                    clock_speed-=2
 
     current_tile = end_tile
     path = []

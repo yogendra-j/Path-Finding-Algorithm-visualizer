@@ -10,9 +10,9 @@ class Button():
         rect = pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
         pygame.draw.rect(screen, self.color, rect)
         # text
-        font = pygame.font.Font('Arcade.ttf', int(self.size[0]*0.6))
+        font = pygame.font.Font('Arcade.ttf', min(int(self.size[0]*0.6), int((self.size[0]*0.6)*(3/len(self.text)))))
         text = font.render(self.text, True, (255,255,255))
-        screen.blit(text, (rect.left + int(rect.width*0.1), rect.top + int(rect.height*0.1)))
+        screen.blit(text, (rect.left + int(rect.width*0.06), rect.top + int(rect.height*0.1)))
 
 
     def ishovering(self, pos):

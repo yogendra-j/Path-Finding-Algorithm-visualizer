@@ -27,7 +27,7 @@ def to_explore(tile, Tile_matrix, end_tile):
     return to_out
 
 
-def astar(Tile_matrix, start_tile, end_tile, screen, newGrid):
+def astar(Tile_matrix, start_tile, end_tile, screen, newGrid, menu_list):
 
     def heuristic_distance(tile, end_tile):
         # one tile is away is 1
@@ -40,7 +40,7 @@ def astar(Tile_matrix, start_tile, end_tile, screen, newGrid):
     current_tile = start_tile
     closed_list = []         #g,h,f=g+h
     distance = {current_tile:[0,0,0]} # g is shortest distance from starting tile (so far possible)
-
+    clock_speed = 2
 
     while current_tile!= end_tile:
         # choose current tile i.e. open tile with minimum h val
@@ -90,12 +90,21 @@ def astar(Tile_matrix, start_tile, end_tile, screen, newGrid):
         draw_matrix(Tile_matrix, screen, newGrid)
         render_label(start_tile, screen)
         render_label(end_tile, screen)
+        # display menu/buttons
+        draw_menu(menu_list, screen)
         pygame.display.update()
-        clock.tick(3)
+        clock.tick(clock_speed)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+            
+            if pygame.mouse.get_pressed() == (1, 0, 0):
+                pos = pygame.mouse.get_pos()
+                if menu_list[0].ishovering(pos):
+                    clock_speed+=2
+                elif menu_list[1].ishovering(pos):
+                    clock_speed-=2
             
     current_tile = end_tile
     path = []
@@ -120,5 +129,7 @@ def render_label(tile, screen):
     cord = (tile.index[1]*tile.width + 10, tile.index[0]*tile.height + 10)
     screen.blit(icon, cord)
 
-
+def draw_menu(menu_list, screen):
+    for button_ in menu_list:
+        button_.draw_button(screen)
 
