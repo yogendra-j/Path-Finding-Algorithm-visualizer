@@ -1,4 +1,5 @@
 import pygame
+import threading
 
 clock = pygame.time.Clock()
 
@@ -25,20 +26,25 @@ def dfs(Tile_matrix, start_tile, end_tile, screen, newGrid, menu_list):
     stack_dfs = stack()
     stack_dfs.add(start_tile)
     clock_speed = 2
+    sp = 0 # speed parameter
     # solve the maze
     while not stack_dfs.empty():
         current_tile = stack_dfs.remove()
         to_explore(stack_dfs, current_tile, Tile_matrix, end_tile)
         current_tile.makeExplored()
+        # clock.tick(clock_speed)   # speed of solving/animation
+        sp+=1
+        if sp != clock_speed: continue
+        # drawing/randering/updating
+        sp = 0
         # drawing/randering/updating
         draw_matrix(Tile_matrix, screen, newGrid)
-
-        clock.tick(clock_speed)   # speed of solving/animation
         render_label(start_tile, screen)
         render_label(end_tile, screen)
         # display menu/buttons
         draw_menu(menu_list, screen)
         pygame.display.update()
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

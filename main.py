@@ -23,8 +23,8 @@ def initialization():
     screen_height = 800
     # screen/window construction
     screen = pygame.display.set_mode((screen_width, screen_height))
-    rows = 20
-    columns = 20
+    rows = 40
+    columns = 40
     #colors
     white = (255, 255, 255)
     red = (255, 0, 0)

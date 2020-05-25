@@ -41,7 +41,7 @@ def astar(Tile_matrix, start_tile, end_tile, screen, newGrid, menu_list):
     closed_list = []         #g,h,f=g+h
     distance = {current_tile:[0,0,0]} # g is shortest distance from starting tile (so far possible)
     clock_speed = 2
-
+    sp = 0 # speed parameter
     while current_tile!= end_tile:
         # choose current tile i.e. open tile with minimum h val
         current_tile = open_list[0]
@@ -86,6 +86,10 @@ def astar(Tile_matrix, start_tile, end_tile, screen, newGrid, menu_list):
                     neartile.makeNewlyDiscovered(current_tile)
                     neartile.text = str(g+h)
 
+         # clock.tick(clock_speed)   # speed of solving/animation
+        sp+=1
+        if sp != clock_speed: continue
+        sp = 0
         # drawing/randering/updating
         draw_matrix(Tile_matrix, screen, newGrid)
         render_label(start_tile, screen)
@@ -93,7 +97,6 @@ def astar(Tile_matrix, start_tile, end_tile, screen, newGrid, menu_list):
         # display menu/buttons
         draw_menu(menu_list, screen)
         pygame.display.update()
-        clock.tick(clock_speed)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
